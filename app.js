@@ -63,16 +63,19 @@ const cookData = async () => {
     let lastHour = '';
     let counter = 0;
     let organizedDays = [];
+    let matchesArray = [];
 
     for (let i in organizedMatches) {
       //if this is the first hour checked for:
       if (lastHour === '') {
         organizedDays.push(fetchedDays[counter]);
-        organizedDays.push(organizedMatches[i]);
+        matchesArray.push(organizedMatches[i]);
 
         lastHour = parseInt(
           organizedMatches[i][0][0] + organizedMatches[i][0][1]
         );
+        organizedDays.push(matchesArray);
+
         // console.log('counter: ', counter);
       }
       //if there are past hours:
@@ -89,9 +92,11 @@ const cookData = async () => {
 
           lastHour = newLastHour;
           organizedDays.push(fetchedDays[counter]);
-          organizedDays.push(organizedMatches[i]);
+          matchesArray.push(organizedMatches[i]);
+          organizedDays.push(matchesArray);
+          matchesArray = [];
         } else {
-          organizedDays.push(organizedMatches[i]);
+          matchesArray.push(organizedMatches[i]);
 
           lastHour = parseInt(
             organizedMatches[i][0][0] + organizedMatches[i][0][1]
@@ -101,7 +106,6 @@ const cookData = async () => {
       }
     }
     console.log(organizedDays);
-    console.log(organizedMatches);
   }
   organizeDays(organizedMatches, fetchedDays);
   //console.log(fetchedData, fetchedDays);
