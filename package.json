@@ -1,16 +1,9 @@
 {
   "name": "hltv-scraper",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "description": "small extension that scrapes HLTV to see CS matches that are happening soon.",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "author": "Sergio Bermejo de las Heras",
   "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "node-fetch": "^3.2.6",
-    "user-agents": "^1.0.1073"
-  }
+  "type": "module"
 }
