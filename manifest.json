@@ -1,0 +1,10 @@
+{
+  "name": "HLTV next matches finder",
+  "description": "This extension scrapes HLTV and displays matches that are soon to happen",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {},
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
