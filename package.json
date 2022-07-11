@@ -1,7 +1,7 @@
 {
   "name": "hltv-scraper",
   "version": "1.0.0",
-  "description": "",
+  "description": "small extension that scrapes HLTV to see CS matches that are happening soon.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

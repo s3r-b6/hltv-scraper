@@ -44,16 +44,6 @@ function separateMatches(fetchedData) {
   }
   return matchesArray;
 }
-
-class Match {
-  constructor(hour, type, teams, tournament) {
-    this.hour = hour;
-    this.type = type;
-    this.teams = teams;
-    this.tournament = tournament;
-  }
-}
-
 function organizeDays(organizedMatches, fetchedDays) {
   let lastHour = '';
   let counter = 0;
@@ -101,6 +91,21 @@ function organizeDays(organizedMatches, fetchedDays) {
     }
   }
   return organizedDays;
+}
+
+class Day {
+  constructor(date, matches) {
+    this.date = date;
+    this.matches = matches;
+  }
+}
+class Match {
+  constructor(hour, type, teams, tournament) {
+    this.hour = hour;
+    this.type = type;
+    this.teams = teams;
+    this.tournament = tournament;
+  }
 }
 
 const cookData = async () => {
