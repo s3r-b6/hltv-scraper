@@ -4,10 +4,33 @@
     <link rel="stylesheet" href="button.css" />
   </head>
   <body>
-    <div id="matchesList"></div>
+    <div id="matchesList">
+      <ul id="mainDay">
+        <h2 class="matchList">Today</h2>
+        <li>Match 1</li>
+        <li>Match 1</li>
+      </ul>
+      <div id="restDays">
+      </div>
+    </div>
   </body>
   <style>
     @import 'https://cdn.jsdelivr.net/npm/water.css@2/out/water.css';
+    #matchesList {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #mainDay {
+      border-bottom: 1px solid grey;
+    }
+    #restDays {
+      display: flex;
+      flex-direction: column;
+
+      font-size: medium;
+    }
   </style>
   <script type="module" src="app.js"></script>
 </html>

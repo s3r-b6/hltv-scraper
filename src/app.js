@@ -54,64 +54,68 @@ class Match {
   }
 }
 
-const cookData = async () => {
-  let fetchedData = await fetchMatches();
-  const organizedMatches = separateMatches(fetchedData);
-  let fetchedDays = await fetchDays();
+function organizeDays(organizedMatches, fetchedDays) {
+  let lastHour = '';
+  let counter = 0;
+  let organizedDays = [];
+  let matchesArray = [];
 
-  function organizeDays(organizedMatches, fetchedDays) {
-    let lastHour = '';
-    let counter = 0;
-    let organizedDays = [];
-    let matchesArray = [];
+  for (let i in organizedMatches) {
+    //if this is the first hour checked for:
+    if (lastHour === '') {
+      organizedDays.push(fetchedDays[counter]);
+      matchesArray.push(organizedMatches[i]);
 
-    for (let i in organizedMatches) {
-      //if this is the first hour checked for:
-      if (lastHour === '') {
+      lastHour = parseInt(
+        organizedMatches[i][0][0] + organizedMatches[i][0][1]
+      );
+      organizedDays.push(matchesArray);
+
+      // console.log('counter: ', counter);
+    }
+    //if there are past hours:
+    else {
+      let newLastHour = parseInt(
+        organizedMatches[i][0][0] + organizedMatches[i][0][1]
+      );
+
+      if (newLastHour < lastHour) {
+        // console.log(newLastHour, lastHour);
+        // console.log('new day');
+        counter = counter + 1;
+        // console.log('counter: ', counter);
+
+        lastHour = newLastHour;
         organizedDays.push(fetchedDays[counter]);
+        matchesArray.push(organizedMatches[i]);
+        organizedDays.push(matchesArray);
+        matchesArray = [];
+      } else {
         matchesArray.push(organizedMatches[i]);
 
         lastHour = parseInt(
           organizedMatches[i][0][0] + organizedMatches[i][0][1]
         );
-        organizedDays.push(matchesArray);
-
-        // console.log('counter: ', counter);
-      }
-      //if there are past hours:
-      else {
-        let newLastHour = parseInt(
-          organizedMatches[i][0][0] + organizedMatches[i][0][1]
-        );
-
-        if (newLastHour < lastHour) {
-          // console.log(newLastHour, lastHour);
-          // console.log('new day');
-          counter = counter + 1;
-          // console.log('counter: ', counter);
-
-          lastHour = newLastHour;
-          organizedDays.push(fetchedDays[counter]);
-          matchesArray.push(organizedMatches[i]);
-          organizedDays.push(matchesArray);
-          matchesArray = [];
-        } else {
-          matchesArray.push(organizedMatches[i]);
-
-          lastHour = parseInt(
-            organizedMatches[i][0][0] + organizedMatches[i][0][1]
-          );
-          //console.log('same day');
-        }
+        //console.log('same day');
       }
     }
-    console.log(organizedDays);
   }
-  organizeDays(organizedMatches, fetchedDays);
-  //console.log(fetchedData, fetchedDays);
-  // console.log(organizedMatches);
+  return organizedDays;
+}
+
+const cookData = async () => {
+  let fetchedData = await fetchMatches();
+  const organizedMatches = separateMatches(fetchedData);
+  let fetchedDays = await fetchDays();
+
+  const organizedDays = organizeDays(organizedMatches, fetchedDays);
+  return organizedDays;
 };
 
-window.onload = () => {
-  cookData();
+function drawData(cookedData) {}
+
+window.onload = async () => {
+  const cookedData = await cookData();
+  drawData(cookedData);
+  console.log(cookedData);
 };
