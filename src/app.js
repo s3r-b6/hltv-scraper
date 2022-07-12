@@ -192,13 +192,15 @@ function drawData(classifiedData) {
       }
 
       MatchElement.innerHTML = `
-      <div class="hourContainer">
-        <p class="tooltip">Hour: </p>
-        <p>${Match.hour}</p>
-      </div>
-      <div class="typeContainer">
-        <p class="tooltip">Type: </p>
-        <p>${Match.type}</p>
+      <div class="infoContainer">
+        <div class="hourContainer">
+          <p class="tooltip">Hour: </p>
+          <p>${Match.hour}</p>
+        </div>
+        <div class="typeContainer">
+          <p class="tooltip">Type: </p>
+          <p>${Match.type}</p>
+        </div>
       </div>
       <div class="teamsColContainer">
         <p class="tooltip">Teams: </p>
@@ -208,7 +210,7 @@ function drawData(classifiedData) {
             TEAMA_URL &&
             `<img onerror="this.src='teamA-icon.png'" class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMA_URL}/${TEAMA_URL}-logo.png?raw=true">`
           }
-          <p>${Match.teams[0]} </p>
+          <p  class="teamText">${Match.teams[0]} </p>
           </div>
           <div class="teamSeparator"> <p>vs</p> </div>
           <div class="teamBContainer">
@@ -216,7 +218,7 @@ function drawData(classifiedData) {
             TEAMB_URL &&
             `<img onerror="this.src='teamB-icon.png'" class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMB_URL}/${TEAMB_URL}-logo.png?raw=true">`
           }
-          <p>${Match.teams[1]}</p>
+          <p class="teamText">${Match.teams[1]}</p>
           </div>
         </div>
       </div>
@@ -224,7 +226,7 @@ function drawData(classifiedData) {
         <p class="tooltip">Tournament: </p>
         <div class="tournamentContainer">
           ${TOURN_URL && `<img src="${TOURN_URL}">`}
-          <p>${Match.tournament}</p>
+          <p class="tournamentText">${Match.tournament}</p>
         </div>
       </div>
       `;
