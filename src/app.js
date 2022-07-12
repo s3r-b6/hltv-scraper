@@ -53,14 +53,10 @@ function organizeDays(organizedMatches, fetchedDays) {
   for (let i in organizedMatches) {
     //if this is the first hour checked for:
     if (lastHour === '') {
-      organizedDays.push(fetchedDays[counter]);
       matchesArray.push(organizedMatches[i]);
-
       lastHour = parseInt(
         organizedMatches[i][0][0] + organizedMatches[i][0][1]
       );
-      organizedDays.push(matchesArray);
-
       // console.log('counter: ', counter);
     }
     //if there are past hours:
@@ -70,16 +66,14 @@ function organizeDays(organizedMatches, fetchedDays) {
       );
 
       if (newLastHour < lastHour) {
-        // console.log(newLastHour, lastHour);
         // console.log('new day');
         counter = counter + 1;
-        // console.log('counter: ', counter);
 
         lastHour = newLastHour;
         organizedDays.push(fetchedDays[counter]);
-        matchesArray.push(organizedMatches[i]);
         organizedDays.push(matchesArray);
         matchesArray = [];
+        matchesArray.push(organizedMatches[i]);
       } else {
         matchesArray.push(organizedMatches[i]);
 
@@ -93,19 +87,57 @@ function organizeDays(organizedMatches, fetchedDays) {
   return organizedDays;
 }
 
-class Day {
-  constructor(date, matches) {
-    this.date = date;
-    this.matches = matches;
+function classifyData(cookedData) {
+  class Day {
+    constructor(date) {
+      this.date = date;
+      this.matches;
+    }
+    addMatch(match) {
+      this.matches = match;
+    }
   }
-}
-class Match {
-  constructor(hour, type, teams, tournament) {
-    this.hour = hour;
-    this.type = type;
-    this.teams = teams;
-    this.tournament = tournament;
+  class Match {
+    constructor(hour, type, teams, tournament) {
+      this.hour = hour;
+      this.type = type;
+      this.teams = teams;
+      this.tournament = tournament;
+    }
   }
+
+  const CompleteDays = [];
+  for (let dataIndex in cookedData) {
+    let matchArray = [];
+    if (dataIndex % 2 !== 0) {
+      for (let matchIndex in cookedData[dataIndex]) {
+        let hour = cookedData[dataIndex][matchIndex][0];
+        let type = cookedData[dataIndex][matchIndex][1];
+        let teamA;
+        let teamB;
+        let tournament;
+        //if there are just 3 fields, that usually means known data is hour, type and tournament
+        if (cookedData[dataIndex][matchIndex].length > 3) {
+          teamA = cookedData[dataIndex][matchIndex][2];
+          teamB = cookedData[dataIndex][matchIndex][3];
+          tournament = cookedData[dataIndex][matchIndex][4];
+        } else {
+          teamA = 'TBC';
+          teamB = 'TBC';
+          tournament = cookedData[dataIndex][matchIndex][2];
+        }
+        const newMatch = new Match(hour, type, [teamA, teamB], tournament);
+        matchArray.push(newMatch);
+        //console.log(newMatch);
+      }
+      let newDay = new Day(cookedData[dataIndex - 1]);
+      newDay.addMatch(matchArray);
+      matchArray = [];
+      //console.log(newDay);
+      CompleteDays.push(newDay);
+    }
+  }
+  return CompleteDays;
 }
 
 const cookData = async () => {
@@ -117,10 +149,55 @@ const cookData = async () => {
   return organizedDays;
 };
 
-function drawData(cookedData) {}
+function drawData(classifiedData) {
+  for (let dayIndex in classifiedData) {
+    let Day;
+    const DayList = document.createElement('ul');
+    const DayHeader = document.createElement('h2');
+    if (dayIndex == 0) {
+      Day = 'Today';
+      DayList.classList.add('today');
+    } else {
+      Day = classifiedData[dayIndex].date;
+      DayList.classList.add('restDays');
+    }
+    DayHeader.innerHTML = `${Day}`;
+    DayHeader.classList.add('dayHeader');
+    DayHeader.id = `${Day}`;
+    for (let matchIndex in classifiedData[dayIndex].matches) {
+      const Match = classifiedData[dayIndex].matches[matchIndex];
+      const MatchElement = document.createElement('li');
+      MatchElement.innerHTML = `
+      <div class="hourContainer">
+        <p class="tooltip">Hour: </p>
+        <p>${Match.hour}</p>
+      </div>
+      <div class="typeContainer">
+        <p class="tooltip">Type: </p>
+        <p>${Match.type}</p>
+      </div>
+      <div class="teamsContainer">
+        <p class="tooltip">Teams: </p>
+        <p>${Match.teams[0]} vs ${Match.teams[1]}</p>
+      </div>
+      <div class="tournamentContainer">
+        <p class="tooltip">Tournament: </p>
+        <p>${Match.tournament}</p>
+      </div>
+      `;
+      DayList.appendChild(MatchElement);
+    }
+    const DaysContainer = document.createElement('div');
+    DaysContainer.classList.add('dayContainer');
+    DaysContainer.appendChild(DayHeader);
+    DaysContainer.appendChild(DayList);
+    document.querySelector('#matchesList').appendChild(DaysContainer);
+  }
+}
 
 window.onload = async () => {
   const cookedData = await cookData();
-  drawData(cookedData);
-  console.log(cookedData);
+  const classifiedData = classifyData(cookedData);
+  drawData(classifiedData);
+  console.log(classifiedData);
 };
