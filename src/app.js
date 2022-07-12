@@ -165,8 +165,47 @@ function drawData(classifiedData) {
     DayHeader.classList.add('dayHeader');
     DayHeader.id = `${Day}`;
     for (let matchIndex in classifiedData[dayIndex].matches) {
+      //https://github.com/lootmarket/esport-team-logos/tree/master/csgo
+
       const Match = classifiedData[dayIndex].matches[matchIndex];
       const MatchElement = document.createElement('li');
+      let TEAMA_URL = Match.teams[0].replaceAll(' ', '-');
+      TEAMA_URL = TEAMA_URL.toLowerCase();
+      let TEAMB_URL = Match.teams[1].replaceAll(' ', '-');
+      TEAMB_URL = TEAMB_URL.toLowerCase();
+
+      if (
+        Match.teams[0] === 'TBC' ||
+        Match.teams[0].includes('/') ||
+        Match.teams[1].includes('winner')
+      ) {
+        TEAMA_URL = '';
+      }
+      if (
+        Match.teams[1] === 'TBC' ||
+        Match.teams[1].includes('/') ||
+        Match.teams[1].includes('winner')
+      ) {
+        TEAMB_URL = '';
+      }
+
+      let TOURN_URL = '';
+      if (
+        Match.tournament.includes('ESL') ||
+        Match.tournament.includes('IEM')
+      ) {
+        TOURN_URL =
+          'https://img-cdn.hltv.org/eventlogo/QtzY_1lU9TI6DUETj2abFo.png?ixlib=java-2.1.0&w=50&s=e0567d28687f638172a2a0f35e6ca140';
+      }
+      if (Match.tournament.includes('ESEA')) {
+        TOURN_URL =
+          'https://img-cdn.hltv.org/eventlogo/b75aNG0i4UVPNQHX_Tq-Zq.png?ixlib=java-2.1.0&w=50&s=abd9825a16bb8b751c86d126865a5d9f';
+      }
+      if (Match.tournament.includes('Flow')) {
+        TOURN_URL =
+          'https://img-cdn.hltv.org/eventlogo/NXRVcPDMcDw7Zd1mPWitL4.png?ixlib=java-2.1.0&w=50&s=efe31ee3c1de397f0489052fe590b9b6';
+      }
+
       MatchElement.innerHTML = `
       <div class="hourContainer">
         <p class="tooltip">Hour: </p>
@@ -176,13 +215,32 @@ function drawData(classifiedData) {
         <p class="tooltip">Type: </p>
         <p>${Match.type}</p>
       </div>
-      <div class="teamsContainer">
+      <div class="teamsColContainer">
         <p class="tooltip">Teams: </p>
-        <p>${Match.teams[0]} vs ${Match.teams[1]}</p>
+        <div class="teamsContainer">
+          <div class="teamAContainer">
+          ${
+            TEAMA_URL &&
+            `<img class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMA_URL}/${TEAMA_URL}-logo.png?raw=true">`
+          }
+          <p>${Match.teams[0]} </p>
+          </div>
+          <div class="teamSeparator"> <p>vs</p> </div>
+          <div class="teamBContainer">
+          ${
+            TEAMB_URL &&
+            `<img class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMB_URL}/${TEAMB_URL}-logo.png?raw=true">`
+          }
+          <p>${Match.teams[1]}</p>
+          </div>
+        </div>
       </div>
-      <div class="tournamentContainer">
+      <div class="tournamentColContainer">
         <p class="tooltip">Tournament: </p>
-        <p>${Match.tournament}</p>
+        <div class="tournamentContainer">
+          ${TOURN_URL && `<img src="${TOURN_URL}">`}
+          <p>${Match.tournament}</p>
+        </div>
       </div>
       `;
       DayList.appendChild(MatchElement);

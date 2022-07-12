@@ -23,9 +23,11 @@
 
     .today {
       height: 50vh;
+      padding: 1rem;
     }
     .restDays {
       height: 30vh;
+      padding: 1rem;
     }
 
     .today,
@@ -68,13 +70,55 @@
     .hourContainer,
     .typeContainer {
       width: 50px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .teamsColContainer {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      width: 300px;
     }
     .teamsContainer {
-      width: 125px;
+      justify-content: center;
+      text-align: center;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .tournamentColContainer {
+      max-width: 275px;
     }
 
     .tournamentContainer {
-      max-width: 275px;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .teamSeparator {
+      font-size: large;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .teamAContainer,
+    .teamBContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 125px;
+      font-weight: 500;
+      font-size: larger;
+    }
+    .teamAContainer {
+      justify-content: flex-end;
+    }
+
+    img {
+      width: 25px;
+      height: 25px;
     }
   </style>
   <script type="module" src="app.js"></script>
