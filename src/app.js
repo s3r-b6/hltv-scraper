@@ -67,10 +67,10 @@ function organizeDays(organizedMatches, fetchedDays) {
 
       if (newLastHour < lastHour) {
         // console.log('new day');
-        counter = counter + 1;
 
         lastHour = newLastHour;
         organizedDays.push(fetchedDays[counter]);
+        counter = counter + 1;
         organizedDays.push(matchesArray);
         matchesArray = [];
         matchesArray.push(organizedMatches[i]);
