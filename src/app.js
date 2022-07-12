@@ -174,21 +174,6 @@ function drawData(classifiedData) {
       let TEAMB_URL = Match.teams[1].replaceAll(' ', '-');
       TEAMB_URL = TEAMB_URL.toLowerCase();
 
-      if (
-        Match.teams[0] === 'TBC' ||
-        Match.teams[0].includes('/') ||
-        Match.teams[1].includes('winner')
-      ) {
-        TEAMA_URL = '';
-      }
-      if (
-        Match.teams[1] === 'TBC' ||
-        Match.teams[1].includes('/') ||
-        Match.teams[1].includes('winner')
-      ) {
-        TEAMB_URL = '';
-      }
-
       let TOURN_URL = '';
       if (
         Match.tournament.includes('ESL') ||
@@ -196,14 +181,14 @@ function drawData(classifiedData) {
       ) {
         TOURN_URL =
           'https://img-cdn.hltv.org/eventlogo/QtzY_1lU9TI6DUETj2abFo.png?ixlib=java-2.1.0&w=50&s=e0567d28687f638172a2a0f35e6ca140';
-      }
-      if (Match.tournament.includes('ESEA')) {
+      } else if (Match.tournament.includes('ESEA')) {
         TOURN_URL =
           'https://img-cdn.hltv.org/eventlogo/b75aNG0i4UVPNQHX_Tq-Zq.png?ixlib=java-2.1.0&w=50&s=abd9825a16bb8b751c86d126865a5d9f';
-      }
-      if (Match.tournament.includes('Flow')) {
+      } else if (Match.tournament.includes('Flow')) {
         TOURN_URL =
           'https://img-cdn.hltv.org/eventlogo/NXRVcPDMcDw7Zd1mPWitL4.png?ixlib=java-2.1.0&w=50&s=efe31ee3c1de397f0489052fe590b9b6';
+      } else {
+        TOURN_URL = 'csgo-icon.png';
       }
 
       MatchElement.innerHTML = `
@@ -221,7 +206,7 @@ function drawData(classifiedData) {
           <div class="teamAContainer">
           ${
             TEAMA_URL &&
-            `<img class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMA_URL}/${TEAMA_URL}-logo.png?raw=true">`
+            `<img onerror="this.src='teamA-icon.png'" class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMA_URL}/${TEAMA_URL}-logo.png?raw=true">`
           }
           <p>${Match.teams[0]} </p>
           </div>
@@ -229,7 +214,7 @@ function drawData(classifiedData) {
           <div class="teamBContainer">
           ${
             TEAMB_URL &&
-            `<img class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMB_URL}/${TEAMB_URL}-logo.png?raw=true">`
+            `<img onerror="this.src='teamB-icon.png'" class="teamLogo" src="https://github.com/lootmarket/esport-team-logos/blob/master/csgo/${TEAMB_URL}/${TEAMB_URL}-logo.png?raw=true">`
           }
           <p>${Match.teams[1]}</p>
           </div>
@@ -252,10 +237,12 @@ function drawData(classifiedData) {
     document.querySelector('#matchesList').appendChild(DaysContainer);
   }
 }
-
 window.onload = async () => {
   const cookedData = await cookData();
   const classifiedData = classifyData(cookedData);
   drawData(classifiedData);
+  setTimeout(() => {
+    document.querySelector('#matchesList').classList.remove('hidden');
+  }, 200);
   console.log(classifiedData);
 };
